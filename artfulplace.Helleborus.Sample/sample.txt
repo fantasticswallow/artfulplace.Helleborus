@@ -1,0 +1,53 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace artfulplace.Bergenia.ViewModel
+{
+    public class MainViewModel : BindableBase
+    {
+        internal static MainViewModel Instance { get; } = new MainViewModel();
+
+
+        public ObservableCollection<TabInfo> Tabs { get; } = new ObservableCollection<TabInfo>();
+        public ObservableCollection<TabInfo> ClassTabs { get; } = new ObservableCollection<TabInfo>();
+        public ObservableCollection<FileInfo> FilesCollection { get; } = new ObservableCollection<FileInfo>();
+
+
+        private FileInfo _CurrentFile = new FileInfo();
+        public FileInfo CurrentFile
+        {
+            get { return _CurrentFile; }
+            set
+            {
+                _CurrentFile = value;
+                NotifyChanged();
+                NotifyChanged("FileSelected");
+            }
+        }
+
+        public bool FileSelected
+        {
+            get
+            {
+                return _CurrentFile.Id != "";
+            }
+        }
+
+        private string _filterText = "";
+        public string FilterText
+        {
+            get { return _filterText; }
+            set
+            {
+                _filterText = value;
+                Model.FileController.UpdateFilterText();
+                NotifyChanged();
+            }
+        }
+
+    }
+}
